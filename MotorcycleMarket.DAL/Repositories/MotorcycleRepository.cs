@@ -36,7 +36,7 @@ namespace MotorcycleMarket.DAL.Repositories
             return await _applicationDbContext.Motorcycle.FirstOrDefaultAsync(x => x.Name == name);
         }
 
-        public async Task<IEnumerable<Motorcycle>> Select()
+        public async Task<List<Motorcycle>> Select()
         {
             return await _applicationDbContext.Motorcycle.ToListAsync();
         }

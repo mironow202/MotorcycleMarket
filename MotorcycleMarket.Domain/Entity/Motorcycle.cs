@@ -12,12 +12,7 @@ namespace MotorcycleMarket.Domain.Entity
         public string Model { get; set; }
         public float Speed { get; set; }
         public decimal Price { get; set; }
-
         public DateTime DateCreate { get; set; }
-
         public TypeMotorcycle TypeMotorcycle { get; set; }
-
-
-        
     }
 }

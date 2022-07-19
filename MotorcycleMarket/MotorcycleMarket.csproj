@@ -12,7 +12,12 @@
   </ItemGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\Motorcycle.Service\MotorcycleMarket.Service.csproj" />
     <ProjectReference Include="..\MotorcycleMarket.DAL\MotorcycleMarket.DAL.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Folder Include="Models\" />
   </ItemGroup>
 
 </Project>

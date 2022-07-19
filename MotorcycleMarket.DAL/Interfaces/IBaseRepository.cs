@@ -1,4 +1,4 @@
-﻿using System;
+﻿ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -12,7 +12,7 @@ namespace MotorcycleMarket.DAL.Interfaces
 
         Task<T> Get(int id);
 
-        Task<IEnumerable<T>> Select();
+        Task<List<T>> Select();
 
         Task<bool> Delete(T entity);
     }

@@ -1,12 +1,12 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using MotorcycleMarket.Domain.Entity;
+using MotorcycleMarket.Domain.Response;
+ 
+ 
 
-namespace Motorcycle.Service.Interfaces
+namespace MotorcycleMarket.Service.Interfaces
 {
-    internal interface IMotorcycleService
+    public interface IMotorcycleService
     {
+        Task<IBaseResponse<IEnumerable<Motorcycle>>> GetAllMotorcycle();
     }
 }

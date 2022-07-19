@@ -1,24 +1,26 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Cors.Infrastructure;
+using Microsoft.AspNetCore.Mvc;
 using MotorcycleMarket.DAL.Interfaces;
 using MotorcycleMarket.Domain.Entity;
+using MotorcycleMarket.Service.Interfaces;
 
 namespace MotorcycleMarket.Controllers
 {
     public class MotorcycleController : Controller
     {
 
-        private readonly IMotorcycleRepository _motorcycleRepository;
+        private readonly IMotorcycleService _motorcycleService;
 
-        public MotorcycleController(IMotorcycleRepository motorcycleRepository)
+        public MotorcycleController(IMotorcycleService motorcycleService)
         {
-            _motorcycleRepository = motorcycleRepository;   
+            _motorcycleService = motorcycleService;
         }
 
         [HttpGet]
         public async Task<IActionResult> GetMotorcycle()
         {
-            var respns = await _motorcycleRepository.Select();
-            return View(respns);
+            var response = await _motorcycleService.GetAllMotorcycle();
+            return View(response);
         }
  
     }

@@ -12,6 +12,6 @@ namespace MotorcycleMarket.Domain.Enum
         [Display(Name = "Внедорожник байк")]
         Offroad = 2,
         [Display(Name = "Стрит байк")]
-        StreetBike = 3,
+        StreetBike = 3
     }
 }

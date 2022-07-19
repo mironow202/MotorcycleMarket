@@ -5,9 +5,34 @@ namespace MotorcycleMarket.DAL
 {
     public class ApplicationDbContext : DbContext
     {
-        public ApplicationDbContext(DbContextOptions<ApplicationDbContext> options) : base(options) {}
+        private ApplicationDbContext()
+        {
+
+        }
+        public ApplicationDbContext(DbContextOptions<ApplicationDbContext> options) : base(options)
+        {
+             Database.EnsureDeleted();
+             Database.EnsureCreated();
+        }
 
         public DbSet<Motorcycle> Motorcycle { get; set; }
+        protected override void OnModelCreating(ModelBuilder modelBuilder)
+        {
+            //base.OnModelCreating(modelBuilder);
+
+
+            modelBuilder.Entity<Motorcycle>().HasData(new Motorcycle
+            {
+                Id = 5,
+                Name = "Yamaha R13",
+                Description = "Очень быстрая",
+                Model = "Yamaha",
+                Speed = 250,
+                Price = 1500000,
+                DateCreate = DateTime.Now,
+                TypeMotorcycle = Domain.Enum.TypeMotorcycle.Sport
+            });
+        }
 
     }
 }

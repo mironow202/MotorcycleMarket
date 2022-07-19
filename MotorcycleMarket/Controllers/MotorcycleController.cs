@@ -19,7 +19,7 @@ namespace MotorcycleMarket.Controllers
         [HttpGet]
         public async Task<IActionResult> GetMotorcycle()
         {
-            var response = await _motorcycleService.GetAllMotorcycle();
+            var response = await _motorcycleService.GetAllMotorcycleAsync();
             return View(response);
         }
  

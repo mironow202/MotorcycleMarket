@@ -7,6 +7,6 @@ namespace MotorcycleMarket.Service.Interfaces
 {
     public interface IMotorcycleService
     {
-        Task<IBaseResponse<IEnumerable<Motorcycle>>> GetAllMotorcycle();
+        Task<IBaseResponse<IEnumerable<Motorcycle>>> GetAllMotorcycleAsync();
     }
 }

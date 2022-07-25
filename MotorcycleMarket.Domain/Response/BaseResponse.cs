@@ -10,6 +10,7 @@ namespace MotorcycleMarket.Domain.Response
     }
     public interface IBaseResponse<T>
     {
+        StatusCode StatusCode { get; }
         T Data { get; set; }
     }
 }

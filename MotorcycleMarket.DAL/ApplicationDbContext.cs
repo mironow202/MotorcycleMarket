@@ -10,15 +10,15 @@ namespace MotorcycleMarket.DAL
 
         }
         public ApplicationDbContext(DbContextOptions<ApplicationDbContext> options) : base(options)
+        
         {
-             Database.EnsureDeleted();
-             Database.EnsureCreated();
+             
         }
 
         public DbSet<Motorcycle> Motorcycle { get; set; }
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
-            //base.OnModelCreating(modelBuilder);
+            base.OnModelCreating(modelBuilder);
 
 
             modelBuilder.Entity<Motorcycle>().HasData(new Motorcycle

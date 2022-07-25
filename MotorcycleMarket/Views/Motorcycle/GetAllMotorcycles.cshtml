@@ -1,0 +1,14 @@
+﻿
+@model List<MotorcycleMarket.Domain.Entity.Motorcycle>
+    
+ 
+
+@foreach(var md in Model)
+{
+    <p>@md.Model</p>
+    <p>@md.DateCreate</p>
+    <p>@md.Description</p>
+    <p>@md.Name</p>
+    <p>@md.Price</p>
+    <p>@md.Model</p>
+}

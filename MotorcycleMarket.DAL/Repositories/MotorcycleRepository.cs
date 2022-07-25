@@ -40,5 +40,13 @@ namespace MotorcycleMarket.DAL.Repositories
         {
             return await _applicationDbContext.Motorcycle.ToListAsync();
         }
+
+        public async Task<Motorcycle> Update(Motorcycle entity)
+        {
+            _applicationDbContext.Update(entity);
+            await _applicationDbContext.SaveChangesAsync();
+
+            return entity;  
+        }
     }
 }

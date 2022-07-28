@@ -50,21 +50,22 @@ namespace MotorcycleMarket.Service.Implementation
             var baseResponse = new BaseResponse<Motorcycle>();
             try
             {
-                var car = await _motorcycleRepository.Get(id);
-                if (car == null)
+                var motorcycle = await _motorcycleRepository.Get(id);
+                if (motorcycle == null)
                 {
                     baseResponse.StatusCode = StatusCode.MotorcycleNotFound;
                     baseResponse.Description = "MotorcycleNotFound";
                     return baseResponse;
                 }
 
-                car.Description = model.Description;
-                car.Price = model.Price;
-                car.Speed = model.Speed;
-                car.DateCreate = model.DateCreate;
-                car.Name = model.Name;
+                motorcycle.Description = model.Description;
+                motorcycle.Model = model.Model;
+                motorcycle.Price = model.Price;
+                motorcycle.Speed = model.Speed;
+                motorcycle.DateCreate = model.DateCreate;
+                motorcycle.Name = model.Name;
 
-                await _motorcycleRepository.Update(car);
+                await _motorcycleRepository.Update(motorcycle);
 
 
                 return baseResponse;
@@ -148,6 +149,8 @@ namespace MotorcycleMarket.Service.Implementation
                     baseResponse.StatusCode = StatusCode.UserNotFound;
                 }
                 baseResponse.Data = motorcycl;
+                baseResponse.StatusCode = StatusCode.OK;
+
                 return baseResponse;
             }
             catch (Exception ex)

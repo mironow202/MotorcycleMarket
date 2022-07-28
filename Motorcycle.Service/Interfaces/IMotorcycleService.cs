@@ -12,6 +12,6 @@ namespace MotorcycleMarket.Service.Interfaces
         Task<IBaseResponse<Motorcycle>> GetMotorcycleAsync(int id);
         Task<IBaseResponse<bool>> DeleteMotorcycleAsync(int id);
         Task<IBaseResponse<Motorcycle>> Edit(int id, MotorcycleViewModel model);
-        Task<IBaseResponse<Motorcycle>> Create(MotorcycleViewModel model);
+        Task<IBaseResponse<bool>> Create(MotorcycleViewModel model);
     }
 }

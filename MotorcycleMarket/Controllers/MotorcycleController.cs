@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Cors.Infrastructure;
 using Microsoft.AspNetCore.Mvc;
 using MotorcycleMarket.DAL.Interfaces;
 using MotorcycleMarket.Domain.Entity;
+using MotorcycleMarket.Domain.ViewModels.Motorcycle;
 using MotorcycleMarket.Service.Interfaces;
 
 namespace MotorcycleMarket.Controllers
@@ -48,6 +49,8 @@ namespace MotorcycleMarket.Controllers
             return RedirectToAction("Eror");
         }
 
+        [HttpGet]
+        [Authorize(Roles = "Admin")]
         public async Task<IActionResult> Save(int id)
         {
             if (id == 0) return View();
@@ -59,6 +62,21 @@ namespace MotorcycleMarket.Controllers
             }
 
             return RedirectToAction("Eror");
+        }
+
+        [HttpGet]
+        [Authorize(Roles = "Admin")]
+        public async Task<IActionResult> Save(MotorcycleViewModel model)
+        {
+            if (ModelState.IsValid)
+            {
+                if (model.ID == 0)
+                    await _motorcycleService.Create(model); 
+                else
+                    await _motorcycleService.Edit(model.ID, model);
+            }
+
+            return RedirectToAction("GetCars");
         }
     }
 }

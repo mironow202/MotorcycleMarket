@@ -1,194 +1,165 @@
 ﻿using MotorcycleMarket.Service.Interfaces;
 using MotorcycleMarket.DAL.Interfaces;
-using MotorcycleMarket.Domain.Response;
 using MotorcycleMarket.Domain.Entity;
-using MotorcycleMarket.Domain.Enum;
+using MotorcycleMarket.Domain.Response;
 using MotorcycleMarket.Domain.ViewModels.Motorcycle;
+using MotorcycleMarket.Domain.Enum;
+using Microsoft.EntityFrameworkCore;
 
 namespace MotorcycleMarket.Service.Implementation
 {
     public class MotorcycleService : IMotorcycleService
     {
-        private readonly IMotorcycleRepository _motorcycleRepository;
-        public MotorcycleService(IMotorcycleRepository motorcycleRepository)
+        private readonly IBaseRepository<Motorcycle> _motorcycleRepository;
+        public MotorcycleService(IBaseRepository<Motorcycle> motorcycleRepository)
         {
             _motorcycleRepository = motorcycleRepository;
         }
 
-        public async Task<IBaseResponse<bool>> Create(MotorcycleViewModel motorcycleViewModel)
+        public async Task<IBaseResponse<Motorcycle>> Create(MotorcycleViewModel model, byte[] imageData)
         {
-            var baseResponse = new BaseResponse<bool>() { Data = true };
             try
             {
-    
-                var motorcl = new Motorcycle()
+                var motorcycle = new Motorcycle()
                 {
-                    Description = motorcycleViewModel.Description,
-                    Name = motorcycleViewModel.Name,
-                    Speed = motorcycleViewModel.Speed,
-                    Price = motorcycleViewModel.Price,
-                    TypeMotorcycle = (TypeMotorcycle)Convert.ToInt32(motorcycleViewModel.TypeMotorcycle),
+                    Name = model.Name,
+                    Model = model.Model,
+                    Description = model.Description,
+                    DateCreate = DateTime.Now,
+                    Speed = model.Speed,
+                    TypeMotorcycle = (TypeMotorcycle)Convert.ToInt32(model.TypeMotorcycle),
+                    Price = model.Price,
+                    Avatar = imageData
                 };
-                var result = await _motorcycleRepository.Create(motorcl);
-                var response = result ? baseResponse.Data = true : baseResponse.Data = false;
-                return baseResponse;
-            }
-            catch (Exception ex)
-            {
-                return new BaseResponse<bool>()
+                await _motorcycleRepository.Create(motorcycle);
+
+                return new BaseResponse<Motorcycle>()
                 {
-                    Data = false,
-                    Description = $"GetMotorcycleByNameAsync : {ex.Message}",
-                    StatusCode = StatusCode.ServerEror
+                    Data = motorcycle,
+                    StatusCode = Domain.Enum.StatusCode.OK
                 };
-            }
-        }
-
-
-        public async Task<IBaseResponse<Motorcycle>> Edit(int id, MotorcycleViewModel model)
-        {
-            var baseResponse = new BaseResponse<Motorcycle>();
-            try
-            {
-                var motorcycle = await _motorcycleRepository.Get(id);
-                if (motorcycle == null)
-                {
-                    baseResponse.StatusCode = StatusCode.MotorcycleNotFound;
-                    baseResponse.Description = "MotorcycleNotFound";
-                    return baseResponse;
-                }
-
-                motorcycle.Description = model.Description;
-                motorcycle.Model = model.Model;
-                motorcycle.Price = model.Price;
-                motorcycle.Speed = model.Speed;
-                motorcycle.DateCreate = model.DateCreate;
-                motorcycle.Name = model.Name;
-
-                await _motorcycleRepository.Update(motorcycle);
-
-
-                return baseResponse;
-
             }
             catch (Exception ex)
             {
                 return new BaseResponse<Motorcycle>()
                 {
-                    Description = $"[Edit] : {ex.Message}",
-                    StatusCode = StatusCode.ServerEror
+                    Description = "MotorcycleService  - Create " + ex.Message,
+                    StatusCode = StatusCode.ServerError
                 };
+                throw;
             }
         }
 
-        public async Task<IBaseResponse<bool>> DeleteMotorcycleAsync(int id)
+        public async Task<IBaseResponse<bool>> DeleteMotorcycle(int id)
         {
-            var baseResponse = new BaseResponse<bool>()
-            {
-                Data = true
-            };
             try
             {
-                var motorcycle = await _motorcycleRepository.Get(id);
+                var motorcycle = await _motorcycleRepository.GetAll().FirstOrDefaultAsync(x => x.Id == id);
                 if (motorcycle == null)
                 {
-                    baseResponse.Description = "User not found";
-                    baseResponse.StatusCode = StatusCode.UserNotFound;
-                    baseResponse.Data = false;
-
-                    return baseResponse;
+                    return new BaseResponse<bool>()
+                    {
+                        Description = "DeleteMotorcycle",
+                        StatusCode = StatusCode.MotorcycleNotFound,
+                        Data = false
+                    };
                 }
 
                 await _motorcycleRepository.Delete(motorcycle);
 
-                return baseResponse;
+                return new BaseResponse<bool>()
+                {
+                    Description = "DeleteMotorcycle",
+                    StatusCode = StatusCode.MotorcycleNotFound,
+                    Data = true
+                };
             }
             catch (Exception ex)
             {
                 return new BaseResponse<bool>()
                 {
-                    Description = $"[DeletMotorcycle] : {ex.Message}",
-                    StatusCode = StatusCode.ServerEror
+                    Description = "MotorcycleService  - Create " + ex.Message,
+                    StatusCode = StatusCode.ServerError,
+                    Data = false
                 };
             }
         }
 
-        public async Task<IBaseResponse<Motorcycle>> GetMotorcycleByNameAsync(string name)
+        public async Task<IBaseResponse<Motorcycle>> Edit(int id, MotorcycleViewModel model)
         {
-            var baseResponse = new BaseResponse<Motorcycle>();
             try
             {
-                var motorcycl = await _motorcycleRepository.GetByNameAsync(name);
-                if (motorcycl == null)
+                var mototrcycle = await _motorcycleRepository.GetAll().FirstOrDefaultAsync(x => x.Id == id);
+                if (mototrcycle == null)
                 {
-                    baseResponse.Description = "Data not found";
-                    baseResponse.StatusCode = StatusCode.UserNotFound;
+                    return new BaseResponse<Motorcycle>()
+                    {
+                        Description = "Edit",
+                        Data = mototrcycle,
+                        StatusCode = StatusCode.MotorcycleNotFound
+                    };
                 }
-                baseResponse.Data = motorcycl;
-                return baseResponse;
+
+                mototrcycle.Id = model.ID;
+                mototrcycle.Name = model.Name;
+                mototrcycle.Description = model.Description;
+                mototrcycle.Price = model.Price;
+                mototrcycle.DateCreate = model.DateCreate;
+                mototrcycle.Avatar = mototrcycle.Avatar;
+
+                await _motorcycleRepository.Update(mototrcycle);
+
+                return new BaseResponse<Motorcycle>()
+                {
+                    Description = "Edit",
+                    Data = mototrcycle,
+                    StatusCode = StatusCode.OK,
+                };
             }
             catch (Exception ex)
             {
                 return new BaseResponse<Motorcycle>()
                 {
-                    Description = $"GetCarByNameAsync : {ex.Message}",
-                    StatusCode = StatusCode.ServerEror
-                };
-            }
+                    Description = ex.Message + "Edit",
+                    StatusCode = StatusCode.ServerError;
+            };
         }
 
-        public async Task<IBaseResponse<Motorcycle>> GetMotorcycleAsync(int id)
+        public async Task<IBaseResponse<MotorcycleViewModel>> GetMotorcycle(int id)
         {
-            var baseResponse = new BaseResponse<Motorcycle>();
             try
             {
-                var motorcycl = await _motorcycleRepository.Get(id);
-                if (motorcycl == null)
+                var motorcycle = await _motorcycleRepository.GetAll().FirstOrDefaultAsync(x => x.Id == id);
+                if (motorcycle == null)
                 {
-                    baseResponse.Description = "Data not found";
-                    baseResponse.StatusCode = StatusCode.UserNotFound;
+                    return new BaseResponse<Motorcycle>()
                 }
-                baseResponse.Data = motorcycl;
-                baseResponse.StatusCode = StatusCode.OK;
 
-                return baseResponse;
             }
-            catch (Exception ex)
+            catch (Exception)
             {
-                return new BaseResponse<Motorcycle>()
-                {
-                    Description = $"GetCarAsync : {ex.Message}",
-                    StatusCode = StatusCode.ServerEror
-                };
+
+                throw;
             }
         }
 
-        public async Task<IBaseResponse<IEnumerable<Motorcycle>>> GetAllMotorcycleAsync()
+        public Task<BaseResponse<Dictionary<int, string>>> GetMotorcycle(string term)
         {
-            var baseResponse = new BaseResponse<IEnumerable<Motorcycle>>(); 
-            try
-            {
-                var motorcycle = await _motorcycleRepository.Select();
-                if (motorcycle.Count == 0)
-                {
-                    baseResponse.Description = "Найдено 0 элементов.";
-                    baseResponse.StatusCode =  StatusCode.OK;
-                    return baseResponse;
-                }
-                baseResponse.Data = motorcycle;
-                baseResponse.StatusCode = StatusCode.OK;
-                return baseResponse;
-            }
-            catch (Exception ex)
-            {
-                return new BaseResponse<IEnumerable<Motorcycle>>()
-                {
-                    Description = $"GetAllMotorcycleAsync : {ex.Message}",
-                    StatusCode = StatusCode.ServerEror
-                };
-            }
+            throw new NotImplementedException();
         }
 
+        public IBaseResponse<List<Motorcycle>> GetMotorcycles()
+        {
+            throw new NotImplementedException();
+        }
 
+        public BaseResponse<Dictionary<int, string>> GetTypes()
+        {
+            throw new NotImplementedException();
+        }
     }
+
 }
+    
+    
+ 

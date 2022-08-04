@@ -1,4 +1,5 @@
-﻿using MotorcycleMarket.Domain.Enum;
+﻿using Microsoft.AspNetCore.Http;
+using MotorcycleMarket.Domain.Enum;
 using System.ComponentModel.DataAnnotations;
 
 namespace MotorcycleMarket.Domain.Entity
@@ -14,5 +15,6 @@ namespace MotorcycleMarket.Domain.Entity
         public decimal Price { get; set; }
         public DateTime DateCreate { get; set; }
         public TypeMotorcycle TypeMotorcycle { get; set; }
+        public byte[]? Avatar { get; set; }
     }
 }

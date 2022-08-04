@@ -50,7 +50,7 @@ namespace MotorcycleMarket.Controllers
         }
 
         [HttpGet]
-        [Authorize(Roles = "Admin")]
+        //[Authorize(Roles = "Admin")]
         public async Task<IActionResult> Save(int id)
         {
             if (id == 0) return View();
@@ -64,8 +64,8 @@ namespace MotorcycleMarket.Controllers
             return RedirectToAction("Eror");
         }
 
-        [HttpGet]
-        [Authorize(Roles = "Admin")]
+        [HttpPost]
+        //[Authorize(Roles = "Admin")]
         public async Task<IActionResult> Save(MotorcycleViewModel model)
         {
             if (ModelState.IsValid)

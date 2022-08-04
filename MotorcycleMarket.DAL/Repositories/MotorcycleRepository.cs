@@ -4,7 +4,7 @@ using MotorcycleMarket.Domain.Entity;
 
 namespace MotorcycleMarket.DAL.Repositories
 {
-    public class MotorcycleRepository : IMotorcycleRepository
+    public class MotorcycleRepository : IBaseRepository<Motorcycle>
     {
         private readonly ApplicationDbContext _applicationDbContext;
         public MotorcycleRepository(ApplicationDbContext applicationDbContext)
@@ -26,19 +26,9 @@ namespace MotorcycleMarket.DAL.Repositories
             return true;    
         }
 
-        public async Task<Motorcycle> Get(int id)
+        public IQueryable<Motorcycle> GetAll()
         {
-            return await _applicationDbContext.Motorcycle.FirstOrDefaultAsync(x => x.Id == id);
-        }
-
-        public async Task<Motorcycle> GetByNameAsync(string name)
-        {
-            return await _applicationDbContext.Motorcycle.FirstOrDefaultAsync(x => x.Name == name);
-        }
-
-        public async Task<List<Motorcycle>> Select()
-        {
-            return await _applicationDbContext.Motorcycle.ToListAsync();
+           return _applicationDbContext.Motorcycle;
         }
 
         public async Task<Motorcycle> Update(Motorcycle entity)

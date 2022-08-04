@@ -5,6 +5,6 @@
         UserNotFound = 0,
         MotorcycleNotFound = 1,
         OK = 200,
-        ServerEror = 500
+        ServerError = 500
     }
 }

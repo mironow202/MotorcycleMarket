@@ -7,11 +7,18 @@ namespace MotorcycleMarket.Service.Interfaces
 {
     public interface IMotorcycleService
     {
-        Task<IBaseResponse<IEnumerable<Motorcycle>>> GetAllMotorcycleAsync();
-        Task<IBaseResponse<Motorcycle>> GetMotorcycleByNameAsync(string name);
-        Task<IBaseResponse<Motorcycle>> GetMotorcycleAsync(int id);
-        Task<IBaseResponse<bool>> DeleteMotorcycleAsync(int id);
+        BaseResponse<Dictionary<int, string>> GetTypes();
+
+        IBaseResponse<List<Motorcycle>> GetMotorcycles();
+
+        Task<IBaseResponse<MotorcycleViewModel>> GetMotorcycle(int id);
+
+        Task<BaseResponse<Dictionary<int, string>>> GetMotorcycle(string term);
+
+        Task<IBaseResponse<Motorcycle>> Create(MotorcycleViewModel model, byte[] imageData);
+
+        Task<IBaseResponse<bool>> DeleteMotorcycle(int id);
+
         Task<IBaseResponse<Motorcycle>> Edit(int id, MotorcycleViewModel model);
-        Task<IBaseResponse<bool>> Create(MotorcycleViewModel model);
     }
 }

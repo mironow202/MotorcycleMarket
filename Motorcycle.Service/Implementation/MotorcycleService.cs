@@ -5,9 +5,11 @@ using MotorcycleMarket.Domain.Response;
 using MotorcycleMarket.Domain.ViewModels.Motorcycle;
 using MotorcycleMarket.Domain.Enum;
 using Microsoft.EntityFrameworkCore;
+using MotorcycleMarket.Domain.Extensions;
 
 namespace MotorcycleMarket.Service.Implementation
 {
+    
     public class MotorcycleService : IMotorcycleService
     {
         private readonly IBaseRepository<Motorcycle> _motorcycleRepository;
@@ -73,6 +75,7 @@ namespace MotorcycleMarket.Service.Implementation
                     StatusCode = StatusCode.MotorcycleNotFound,
                     Data = true
                 };
+
             }
             catch (Exception ex)
             {
@@ -95,7 +98,6 @@ namespace MotorcycleMarket.Service.Implementation
                     return new BaseResponse<Motorcycle>()
                     {
                         Description = "Edit",
-                        Data = mototrcycle,
                         StatusCode = StatusCode.MotorcycleNotFound
                     };
                 }
@@ -121,7 +123,8 @@ namespace MotorcycleMarket.Service.Implementation
                 return new BaseResponse<Motorcycle>()
                 {
                     Description = ex.Message + "Edit",
-                    StatusCode = StatusCode.ServerError;
+                    StatusCode = StatusCode.ServerError
+                };
             };
         }
 
@@ -132,28 +135,81 @@ namespace MotorcycleMarket.Service.Implementation
                 var motorcycle = await _motorcycleRepository.GetAll().FirstOrDefaultAsync(x => x.Id == id);
                 if (motorcycle == null)
                 {
-                    return new BaseResponse<Motorcycle>()
+                    return new BaseResponse<MotorcycleViewModel>()
+                    {
+                        Description = "GetMotorcycle by id",
+                        StatusCode = StatusCode.MotorcycleNotFound
+                    };
                 }
 
+                var data = new MotorcycleViewModel()
+                {
+                    DateCreate = motorcycle.DateCreate,
+                    Description = motorcycle.Description,
+                    Name = motorcycle.Name,
+                    Price = motorcycle.Price,
+                    TypeMotorcycle = motorcycle.TypeMotorcycle.GetDisplayName(),
+                    Speed = motorcycle.Speed,
+                    Model = motorcycle.Model,
+                    Image = motorcycle.Avatar,
+                };
+
+                return new BaseResponse<MotorcycleViewModel>()
+                {
+                    Description = "GetMotorcycle by",
+                    Data = data,
+                    StatusCode = StatusCode.OK
+                };
+
             }
-            catch (Exception)
+            catch (Exception ex)
             {
 
-                throw;
+                return new BaseResponse<MotorcycleViewModel>()
+                {
+                    Description = "GetMotorcycle by" + ex.Message,
+                    StatusCode = StatusCode.ServerError
+                };
+
             }
         }
-
-        public Task<BaseResponse<Dictionary<int, string>>> GetMotorcycle(string term)
-        {
-            throw new NotImplementedException();
-        }
-
+ 
         public IBaseResponse<List<Motorcycle>> GetMotorcycles()
         {
-            throw new NotImplementedException();
+            try
+            {
+                var motrcl = _motorcycleRepository.GetAll().ToList();
+                if (!motrcl.Any())
+                {
+                    return new BaseResponse<List<Motorcycle>>()
+                    {
+                        Description = "Найдено 0 элементов in GetMotorcycles",
+                        StatusCode = StatusCode.OK
+                    };
+                }
+
+                return new BaseResponse<List<Motorcycle>>()
+                {
+                    Data = motrcl,
+                    StatusCode = StatusCode.OK
+                };
+            }
+            catch (Exception ex)
+            {
+                return new BaseResponse<List<Motorcycle>>()
+                {
+                    Description = "GetMotorcycles" + ex.Message,
+                    StatusCode = StatusCode.ServerError
+                };
+            }
         }
 
         public BaseResponse<Dictionary<int, string>> GetTypes()
+        {
+            throw new NotImplementedException();
+        }
+
+        public Task<BaseResponse<Dictionary<int, string>>> GetMotorcycle(string term)
         {
             throw new NotImplementedException();
         }

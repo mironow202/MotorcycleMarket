@@ -6,7 +6,6 @@ namespace MotorcycleMarket.Domain.Entity
 {
     public class Motorcycle
     {
-        [Key]
         public int Id { get; set; }
         public string Name { get; set; }
         public string Description { get; set; }

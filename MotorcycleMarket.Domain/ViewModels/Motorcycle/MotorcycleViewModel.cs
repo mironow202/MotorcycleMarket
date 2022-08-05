@@ -16,5 +16,6 @@ namespace MotorcycleMarket.Domain.ViewModels.Motorcycle
         public DateTime DateCreate { get; set; }
         public string TypeMotorcycle { get; set; }
         public IFormFile Avatar { get; set; }
+        public byte[]? Image { get; set; }
     }
 }

@@ -1,8 +1,5 @@
 ﻿using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Cors.Infrastructure;
 using Microsoft.AspNetCore.Mvc;
-using MotorcycleMarket.DAL.Interfaces;
-using MotorcycleMarket.Domain.Entity;
 using MotorcycleMarket.Domain.ViewModels.Motorcycle;
 using MotorcycleMarket.Service.Interfaces;
 
@@ -21,18 +18,17 @@ namespace MotorcycleMarket.Controllers
         [HttpGet]
         public async Task<IActionResult> GetAllMotorcycles()
         {
-            var response = await _motorcycleService.GetAllMotorcycleAsync();
+            var response = _motorcycleService.GetMotorcycles();
             if (response.StatusCode == Domain.Enum.StatusCode.OK)
-            {
                 return View(response.Data);
-            }
+
             return RedirectToAction("Eror");
         }
 
         [HttpGet]
         public async Task<IActionResult> GetMotorcycle(int id)
         {
-            var response = await _motorcycleService.GetMotorcycleAsync(id);
+            var response = await _motorcycleService.GetMotorcycle(id);
             if (response.StatusCode == Domain.Enum.StatusCode.OK)
                 return View(response.Data);
 
@@ -42,7 +38,7 @@ namespace MotorcycleMarket.Controllers
         [Authorize(Roles = "Admin")]
         public async Task<IActionResult> Delete(int id)
         {
-            var response = await _motorcycleService.DeleteMotorcycleAsync(id);
+            var response = await _motorcycleService.DeleteMotorcycle(id);
             if (response.StatusCode == Domain.Enum.StatusCode.OK)
                 return View(response.Data);
 
@@ -50,31 +46,21 @@ namespace MotorcycleMarket.Controllers
         }
 
         [HttpGet]
-        //[Authorize(Roles = "Admin")]
         public async Task<IActionResult> Save(int id)
         {
             if (id == 0) return View();
 
-            var response = await _motorcycleService.GetMotorcycleAsync(id);
+            var response = await _motorcycleService.GetMotorcycle(id);
             if (response.StatusCode == Domain.Enum.StatusCode.OK)
-            {
                 return View(response.Data);
-            }
 
             return RedirectToAction("Eror");
         }
 
         [HttpPost]
-        //[Authorize(Roles = "Admin")]
         public async Task<IActionResult> Save(MotorcycleViewModel model)
         {
-            if (ModelState.IsValid)
-            {
-                if (model.ID == 0)
-                    await _motorcycleService.Create(model); 
-                else
-                    await _motorcycleService.Edit(model.ID, model);
-            }
+            
 
             return RedirectToAction("GetCars");
         }

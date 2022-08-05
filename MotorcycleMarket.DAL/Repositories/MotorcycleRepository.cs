@@ -14,7 +14,7 @@ namespace MotorcycleMarket.DAL.Repositories
 
         public async Task<bool> Create(Motorcycle entity)
         {
-            await _applicationDbContext.Motorcycle.AddAsync(entity);
+            await _applicationDbContext.Motorcycles.AddAsync(entity);
             await _applicationDbContext.SaveChangesAsync();
             return true;
         }
@@ -28,7 +28,7 @@ namespace MotorcycleMarket.DAL.Repositories
 
         public IQueryable<Motorcycle> GetAll()
         {
-           return _applicationDbContext.Motorcycle;
+           return _applicationDbContext.Motorcycles;
         }
 
         public async Task<Motorcycle> Update(Motorcycle entity)

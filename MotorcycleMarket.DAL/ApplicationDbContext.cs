@@ -1,38 +1,52 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using MotorcycleMarket.Domain.Entity;
+using MotorcycleMarket.Domain.Enum;
+using MotorcycleMarket.Domain.Helpers;
 
 namespace MotorcycleMarket.DAL
 {
     public class ApplicationDbContext : DbContext
     {
-        private ApplicationDbContext()
-        {
+        public DbSet<Motorcycle> Motorcycles { get; set; }
+        public DbSet<User> Users { get; set; }
 
-        }
-        public ApplicationDbContext(DbContextOptions<ApplicationDbContext> options) : base(options)
-        
-        {
-             
-        }
+        public ApplicationDbContext(DbContextOptions<ApplicationDbContext> options) : base(options) { Database.EnsureCreated(); }
 
-        public DbSet<Motorcycle> Motorcycle { get; set; }
+      
+
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             base.OnModelCreating(modelBuilder);
-
-
+        
             modelBuilder.Entity<Motorcycle>().HasData(new Motorcycle
             {
-                Id = 5,
-                Name = "Yamaha R13",
+                Id = 1,
+                Name = "Yamaha R1",
                 Description = "Очень быстрая",
                 Model = "Yamaha",
                 Speed = 250,
                 Price = 1500000,
                 DateCreate = DateTime.Now,
-                TypeMotorcycle = Domain.Enum.TypeMotorcycle.Sport
+                TypeMotorcycle = TypeMotorcycle.Sport
             });
-        }
+            
+            modelBuilder.Entity<User>(builder =>
+            {
+                builder.HasKey(x => x.Id);
 
-    }
+                builder.HasData(new User
+                {
+                    Id = 1,
+                    Name = "Mironow",
+                    Password = HashPasswordHelper.HashPassowrd("123456"),
+                    Role = Role.Admin
+                });
+
+                builder.Property(x => x.Id).ValueGeneratedOnAdd();
+
+                builder.Property(x => x.Password).IsRequired();
+                builder.Property(x => x.Name).HasMaxLength(100).IsRequired();
+                 
+            });
+    }   }
 }

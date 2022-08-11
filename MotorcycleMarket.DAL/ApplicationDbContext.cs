@@ -12,12 +12,11 @@ namespace MotorcycleMarket.DAL
 
         public ApplicationDbContext(DbContextOptions<ApplicationDbContext> options) : base(options) { Database.EnsureCreated(); }
 
-      
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             base.OnModelCreating(modelBuilder);
-        
+
             modelBuilder.Entity<Motorcycle>().HasData(new Motorcycle
             {
                 Id = 1,
@@ -29,7 +28,7 @@ namespace MotorcycleMarket.DAL
                 DateCreate = DateTime.Now,
                 TypeMotorcycle = TypeMotorcycle.Sport
             });
-            
+
             modelBuilder.Entity<User>(builder =>
             {
                 builder.HasKey(x => x.Id);
@@ -46,7 +45,7 @@ namespace MotorcycleMarket.DAL
 
                 builder.Property(x => x.Password).IsRequired();
                 builder.Property(x => x.Name).HasMaxLength(100).IsRequired();
-                 
+
             });
     }   }
 }

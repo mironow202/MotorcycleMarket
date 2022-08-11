@@ -6,35 +6,35 @@ namespace MotorcycleMarket.DAL.Repositories
 {
     public class MotorcycleRepository : IBaseRepository<Motorcycle>
     {
-        private readonly ApplicationDbContext _applicationDbContext;
+        private readonly ApplicationDbContext _context;
         public MotorcycleRepository(ApplicationDbContext applicationDbContext)
         {
-            _applicationDbContext = applicationDbContext;
+            _context = applicationDbContext;
         }
 
         public async Task<bool> Create(Motorcycle entity)
         {
-            await _applicationDbContext.Motorcycles.AddAsync(entity);
-            await _applicationDbContext.SaveChangesAsync();
+            await _context.Motorcycles.AddAsync(entity);
+            await _context.SaveChangesAsync();
             return true;
         }
 
         public async Task<bool> Delete(Motorcycle entity)
         {
-            _applicationDbContext.Remove(entity);
-            await _applicationDbContext.SaveChangesAsync();
+            _context.Remove(entity);
+            await _context.SaveChangesAsync();
             return true;    
         }
 
         public IQueryable<Motorcycle> GetAll()
         {
-           return _applicationDbContext.Motorcycles;
+           return _context.Motorcycles;
         }
 
         public async Task<Motorcycle> Update(Motorcycle entity)
         {
-            _applicationDbContext.Update(entity);
-            await _applicationDbContext.SaveChangesAsync();
+            _context.Update(entity);
+            await _context.SaveChangesAsync();
 
             return entity;  
         }

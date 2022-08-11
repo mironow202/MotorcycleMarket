@@ -5,6 +5,7 @@ using MotorcycleMarket.DAL.Repositories;
 using MotorcycleMarket.Service.Interfaces;
 using MotorcycleMarket.Service.Implementation;
 using MotorcycleMarket.Domain.Entity;
+using MotorcycleMarket;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -28,7 +29,11 @@ app.UseStaticFiles();
 
 app.UseRouting();
 
+app.UseMiddleware<JwtMiddleware>();
+app.UseAuthentication();
 app.UseAuthorization();
+ 
+
 
 app.MapControllerRoute(
     name: "default",

@@ -36,16 +36,20 @@ namespace MotorcycleMarket.DAL
                 builder.HasData(new User
                 {
                     Id = 1,
-                    Name = "Mironow",
+                    UserName = "Mironow",
+                    FirstName = "Герыч",
                     Password = HashPasswordHelper.HashPassowrd("123456"),
+                    LastName = "Kilan",
+                    Email = "1212",
                     Role = Role.Admin
                 });
 
                 builder.Property(x => x.Id).ValueGeneratedOnAdd();
 
                 builder.Property(x => x.Password).IsRequired();
-                builder.Property(x => x.Name).HasMaxLength(100).IsRequired();
+                builder.Property(x => x.UserName).HasMaxLength(100).IsRequired();
 
             });
-    }   }
+        }
+    } 
 }

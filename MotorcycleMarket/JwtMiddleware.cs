@@ -47,7 +47,7 @@ namespace MotorcycleMarket
                 var jwtToken = (JwtSecurityToken)validatedToken;
                 var userId = int.Parse(jwtToken.Claims.First(x => x.Type == "id").Value);
 
-                context.Items["User"] = userService.
+                //context.Items["User"] = userService.GetById(userId);
             }
             catch
             {

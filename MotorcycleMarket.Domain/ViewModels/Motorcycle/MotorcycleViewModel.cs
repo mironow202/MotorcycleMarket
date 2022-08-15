@@ -6,7 +6,6 @@ namespace MotorcycleMarket.Domain.ViewModels.Motorcycle
     public class MotorcycleViewModel 
     {
         //TODO: Дисплей + аватар
-        //[Display("")]
         public int ID { get; set; }
         public string Name { get; set; }
         public string Description { get; set; }

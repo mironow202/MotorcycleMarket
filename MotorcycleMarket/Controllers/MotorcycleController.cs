@@ -35,7 +35,6 @@ namespace MotorcycleMarket.Controllers
             return RedirectToAction("Eror");
         }
 
-        [Authorize(Roles = "Admin")]
         public async Task<IActionResult> Delete(int id)
         {
             var response = await _motorcycleService.DeleteMotorcycle(id);

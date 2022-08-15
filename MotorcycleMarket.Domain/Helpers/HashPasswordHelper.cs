@@ -5,14 +5,21 @@ namespace MotorcycleMarket.Domain.Helpers
 {
     public static class HashPasswordHelper
     {
-        public static string HashPassowrd(string password)
+        public static void CreatePasswordHash(string password, out byte[] passwordHash, out byte[] passwordSalt)
         {
-            using (var sha256 = SHA256.Create())
+            using (var hmac = new HMACSHA512())
             {
-                var hashedBytes = sha256.ComputeHash(Encoding.UTF8.GetBytes(password));
-                var hash = BitConverter.ToString(hashedBytes).Replace("-", "").ToLower();
+                passwordSalt = hmac.Key;
+                passwordHash = hmac.ComputeHash(System.Text.Encoding.UTF8.GetBytes(password));
+            }
+        }
 
-                return hash;
+        public static bool VerifyPasswordHash(string password, byte[] passwordHash, byte[] passwordSalt)
+        {
+            using (var hmac = new HMACSHA512(passwordSalt))
+            {
+                var computedHash = hmac.ComputeHash(System.Text.Encoding.UTF8.GetBytes(password));
+                return computedHash.SequenceEqual(passwordHash);
             }
         }
     }

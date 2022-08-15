@@ -3,7 +3,7 @@
 }
 
 <div style="padding: 10px;"></div>
-@if (true)
+@if (User.Identity.IsAuthenticated)
 {
   <div class="card col-md-12">
   <div class="card-body">
@@ -55,7 +55,7 @@
         <p class="card-text">Audi AG — немецкая автомобилестроительная компания в составе концерна Volkswagen Group, специализирующаяся на выпуске автомобилей под маркой Audi</p>
       </div>
       <div class="card-footer text-center">
-        <a asp-controller="Car" asp-action="GetCars" class="card-link">Список машин</a>
+        <a asp-controller="Account" asp-action="Register" class="card-link">Список машинfffffffffffffffffffff</a>
       </div>
     </div>
   </div>

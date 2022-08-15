@@ -21,6 +21,7 @@
                 <path fill-rule="evenodd" d="M0 2a2 2 0 0 1 2-2h12a2 2 0 0 1 2 2v12a2 2 0 0 1-2 2H2a2 2 0 0 1-2-2V2zm4 4a.5.5 0 0 0-.374.832l4 4.5a.5.5 0 0 0 .748 0l4-4.5A.5.5 0 0 0 12 6H4z" />
             </svg>
         </button>
+       <a class="navbar-brand" asp-controller="Account" asp-action="Register"><span style="color:black; font-family:Impact; font-size:30px; background-color:white; border-radius:10px;">Register</span>@**@</a>
         <div class="collapse navbar-collapse">
             <ul class="navbar-nav mr-auto">
                 @if (!User.Identity.IsAuthenticated)

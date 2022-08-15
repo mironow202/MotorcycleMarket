@@ -7,11 +7,11 @@ using System.Threading.Tasks;
 
 namespace MotorcycleMarket.Domain.ViewModels.Registration
 {
-    internal class RegisterViewModel
+    public class RegisterViewModel
     {
         [Required(ErrorMessage = "Укажите имя")]
         [StringLength(50, MinimumLength = 3, ErrorMessage = "Длина имени должна быть от 3 до 40 символов")]
-        public string Name { get; set; }
+        public string UserName { get; set; }
 
         [DataType(DataType.Password)]
         [StringLength(50, MinimumLength = 3, ErrorMessage = "Длина имени должна быть от 3 до 40 символов")]
@@ -20,8 +20,6 @@ namespace MotorcycleMarket.Domain.ViewModels.Registration
         [DataType(DataType.Password)]
         [StringLength(50, MinimumLength = 3, ErrorMessage = "Длина имени должна быть от 3 до 40 символов")]
         [Compare("Password", ErrorMessage = "Пароли не совпадают")]
-        public string MyProperty { get; set; }
-
-        public string Token { get; set; }
+        public string PasswordComfirm { get; set; }
     }
 }

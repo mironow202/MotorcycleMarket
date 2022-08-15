@@ -12,11 +12,11 @@ namespace MotorcycleMarket.DAL.Repositories
             _context = applicationDbContext;
         }
 
-        public async Task<bool> Create(Motorcycle entity)
+        public async Task Create(Motorcycle entity)
         {
             await _context.Motorcycles.AddAsync(entity);
             await _context.SaveChangesAsync();
-            return true;
+            
         }
 
         public async Task<bool> Delete(Motorcycle entity)

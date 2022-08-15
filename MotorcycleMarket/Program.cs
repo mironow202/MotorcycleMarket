@@ -6,6 +6,7 @@ using MotorcycleMarket.Service.Interfaces;
 using MotorcycleMarket.Service.Implementation;
 using MotorcycleMarket.Domain.Entity;
 using MotorcycleMarket;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -15,6 +16,11 @@ string connection = builder.Configuration.GetConnectionString("DefaultConnection
 builder.Services.AddDbContext<ApplicationDbContext>(options => options.UseSqlServer(connection));
 builder.Services.AddScoped<IBaseRepository<Motorcycle>, MotorcycleRepository>();
 builder.Services.AddScoped<IMotorcycleService, MotorcycleService>();
+builder.Services.AddScoped<IBaseRepository<User>, UserRepository>();
+builder.Services.AddAuthorization();
+builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
+builder.Services.AddScoped<IAccountService, AccountService>();
+
 
 var app = builder.Build();
 
@@ -29,11 +35,10 @@ app.UseStaticFiles();
 
 app.UseRouting();
 
-app.UseMiddleware<JwtMiddleware>();
 app.UseAuthentication();
 app.UseAuthorization();
- 
 
+app.UseMiddleware<JwtMiddleware>();
 
 app.MapControllerRoute(
     name: "default",

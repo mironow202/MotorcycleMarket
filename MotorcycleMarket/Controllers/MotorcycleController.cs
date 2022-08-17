@@ -1,6 +1,6 @@
 ﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using MotorcycleMarket.Domain.ViewModels.Motorcycle;
+using MotorcycleMarket.Domain.ViewModels;
 using MotorcycleMarket.Service.Interfaces;
 
 namespace MotorcycleMarket.Controllers

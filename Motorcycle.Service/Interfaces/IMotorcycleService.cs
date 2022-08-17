@@ -1,7 +1,7 @@
 ﻿using MotorcycleMarket.DAL.Interfaces;
 using MotorcycleMarket.Domain.Entity;
 using MotorcycleMarket.Domain.Response;
-using MotorcycleMarket.Domain.ViewModels.Motorcycle;
+using MotorcycleMarket.Domain.ViewModels;
 
 namespace MotorcycleMarket.Service.Interfaces
 {

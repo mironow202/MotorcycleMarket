@@ -2,14 +2,14 @@
 using MotorcycleMarket.DAL.Interfaces;
 using MotorcycleMarket.Domain.Entity;
 using MotorcycleMarket.Domain.Response;
-using MotorcycleMarket.Domain.ViewModels.Motorcycle;
 using MotorcycleMarket.Domain.Enum;
 using Microsoft.EntityFrameworkCore;
 using MotorcycleMarket.Domain.Extensions;
+using MotorcycleMarket.Domain.ViewModels;
 
 namespace MotorcycleMarket.Service.Implementation
 {
-    
+
     public class MotorcycleService : IMotorcycleService
     {
         private readonly IBaseRepository<Motorcycle> _motorcycleRepository;
@@ -137,7 +137,7 @@ namespace MotorcycleMarket.Service.Implementation
                 {
                     return new BaseResponse<MotorcycleViewModel>()
                     {
-                        Description = "GetMotorcycle by id",
+                        Description = "MotorcycleNotFound",
                         StatusCode = StatusCode.MotorcycleNotFound
                     };
                 }

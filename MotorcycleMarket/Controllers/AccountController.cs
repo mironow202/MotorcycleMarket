@@ -4,9 +4,10 @@ using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Mvc;
 using MotorcycleMarket.Domain.Entity;
 using MotorcycleMarket.Domain.Response;
-using MotorcycleMarket.Domain.ViewModels.Registration;
+using MotorcycleMarket.Domain.ViewModels;
 using MotorcycleMarket.Service.Interfaces;
 using System.IdentityModel.Tokens.Jwt;
+using System.Security.Claims;
 
 namespace MotorcycleMarket.Controllers
 {
@@ -18,16 +19,27 @@ namespace MotorcycleMarket.Controllers
             _accountService = accountService;
         }
 
-        public IActionResult Authenticate(AuthenticateRequest model)
-        {
-            var response = _accountService.Authenticate(model);
+        [HttpGet]
+        public IActionResult Login() => View();
 
-            if (response == null)
+        [HttpPost]
+        public async Task<IActionResult> Login(LoginViewModel userModel)
+        {
+            if (ModelState.IsValid)
             {
-                return BadRequest(new {message = "Username or passord is incorr" } );
+                var response = await _accountService.LoginAsync(userModel);
+                if (response.StatusCode == Domain.Enum.StatusCode.OK)
+                {
+                    await HttpContext.SignInAsync(CookieAuthenticationDefaults.AuthenticationScheme,
+                        new ClaimsPrincipal(response.Data));
+
+                    return RedirectToAction("Index", "Home");
+                }
+                ModelState.AddModelError("", response.Description);
             }
-            return Ok(response);
+            return View(userModel);
         }
+
 
         [HttpGet]       
         public IActionResult Register() => View();
@@ -43,6 +55,8 @@ namespace MotorcycleMarket.Controllers
                     await HttpContext.SignInAsync(CookieAuthenticationDefaults.AuthenticationScheme,
                         new ClaimsPrincipal(response.Data));
 
+                    //await HttpContext.SignInAsync(new ClaimsPrincipal(response.Data));
+
                     return RedirectToAction("Index", "Home");
                 }
                 ModelState.AddModelError("", response.Description);
@@ -51,8 +65,12 @@ namespace MotorcycleMarket.Controllers
         }
 
 
-
-
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> Logout()
+        {
+            await HttpContext.SignOutAsync(CookieAuthenticationDefaults.AuthenticationScheme);
+            return RedirectToAction("Index", "Home");
+        }
 
 
         #region test

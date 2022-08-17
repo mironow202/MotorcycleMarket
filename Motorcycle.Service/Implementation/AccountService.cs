@@ -7,44 +7,46 @@ using MotorcycleMarket.Service.Interfaces;
 using MotorcycleMarket.Domain.Helpers;
 using System.Security.Claims;
 using Microsoft.EntityFrameworkCore;
-using MotorcycleMarket.Domain.ViewModels.Registration;
 using MotorcycleMarket.Domain.Enum;
+using MotorcycleMarket.Domain.ViewModels;
+using Microsoft.AspNetCore.Authentication.Cookies;
 
 namespace MotorcycleMarket.Service.Implementation
 {
     public class AccountService : IAccountService
     {
         private readonly IBaseRepository<User> _userRepository;
-        private readonly IConfiguration _configuration;
 
-        public AccountService(IBaseRepository<User> baseRepository, IConfiguration configuration/*, IMapper mapper*/)
+        public AccountService(IBaseRepository<User> baseRepository)
         {
             _userRepository = baseRepository;   
-            _configuration = configuration;
         }
 
-        public async Task<BaseResponse<ClaimsIdentity>> LoginAsync(RegisterViewModel registerViewModel)
+        public async Task<BaseResponse<ClaimsIdentity>> LoginAsync(LoginViewModel loginmodel)
         {
             try
             {
-                var user = _userRepository.GetAll().FirstOrDefault(x => x.Username == registerViewModel.UserName);
-                if (user == null && !HashPasswordHelper.VerifyPasswordHash(registerViewModel.Password, user.PasswordHash, user.PasswordSalt))
+                var user = _userRepository.GetAll().FirstOrDefault(x => x.Username == loginmodel.UserName);
+                if (user == null && !HashPasswordHelper.VerifyPasswordHash(loginmodel.Password, user.PasswordHash, user.PasswordSalt))
                 {
                     return new BaseResponse<ClaimsIdentity>() { Description = "Incorrect password or username entered incorrectly" };
                 }
 
                 var res = Authenticate(user);
+
                 return new BaseResponse<ClaimsIdentity>()
                 {
                     Data = res,
                     StatusCode = StatusCode.OK
                 };
-
             }
             catch (Exception ex)
             {
-
-                
+                return new BaseResponse<ClaimsIdentity>()
+                {
+                    Description = ex.Message,
+                    StatusCode = StatusCode.ServerError
+                };
             }
         }
 
@@ -60,6 +62,7 @@ namespace MotorcycleMarket.Service.Implementation
                         Description = "Пользователь с таким логином уже есть",
                     };
                 }
+
                 HashPasswordHelper.CreatePasswordHash(registerViewModel.Password, out byte[] passwordHash, out byte[] passwordSalt);
 
                 user = new User()
@@ -76,7 +79,8 @@ namespace MotorcycleMarket.Service.Implementation
                 return new BaseResponse<ClaimsIdentity>()
                 {
                     Data = auth,
-                    Description = "Registration good"
+                    Description = "Registration good",
+                    StatusCode = StatusCode.OK
                 };
 
             }
@@ -98,8 +102,10 @@ namespace MotorcycleMarket.Service.Implementation
                 new Claim(ClaimsIdentity.DefaultNameClaimType, user.Username),
                 new Claim(ClaimsIdentity.DefaultRoleClaimType, user.Role.ToString())
             };
-            return new ClaimsIdentity(claims);
-        }
 
+            var claimsIdentity = new ClaimsIdentity(
+                claims, CookieAuthenticationDefaults.AuthenticationScheme);
+            return  claimsIdentity;
+        }
     }
 }

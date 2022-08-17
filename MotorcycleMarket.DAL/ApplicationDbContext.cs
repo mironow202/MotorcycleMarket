@@ -9,6 +9,7 @@ namespace MotorcycleMarket.DAL
     {
         public DbSet<Motorcycle> Motorcycles { get; set; }
         public DbSet<User> Users { get; set; }
+        public DbSet<User> Profiles { get; set; }
 
         public ApplicationDbContext(DbContextOptions<ApplicationDbContext> options) : base(options) { Database.EnsureCreated(); }
 
@@ -33,22 +34,30 @@ namespace MotorcycleMarket.DAL
             {
                 builder.HasKey(x => x.Id);
 
+                HashPasswordHelper.CreatePasswordHash("321", out byte[] passwordHash, out byte[] passwordSalt);
                 builder.HasData(new User
                 {
                     Id = 1,
-                    UserName = "Mironow",
-                    FirstName = "Герыч",
-                    Password = HashPasswordHelper.HashPassowrd("123456"),
-                    LastName = "Kilan",
-                    Email = "1212",
+                    Username = "Mironow",
+                    PasswordHash = passwordHash,
+                    PasswordSalt = passwordSalt,
                     Role = Role.Admin
                 });
 
                 builder.Property(x => x.Id).ValueGeneratedOnAdd();
 
-                builder.Property(x => x.Password).IsRequired();
-                builder.Property(x => x.UserName).HasMaxLength(100).IsRequired();
+                builder.Property(x => x.PasswordSalt).IsRequired();
+                builder.Property(x => x.PasswordHash).HasMaxLength(100).IsRequired();
+            });
 
+            modelBuilder.Entity<Profile>(builder =>
+            {
+                builder.HasKey(x => x.Id);
+
+                builder.Property(x => x.Id).ValueGeneratedOnAdd();
+
+                builder.Property(x => x.Age);
+                builder.Property(x => x.Address).HasMaxLength(200).IsRequired(false);
             });
         }
     } 

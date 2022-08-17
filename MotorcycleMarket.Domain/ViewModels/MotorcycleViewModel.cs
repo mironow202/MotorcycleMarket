@@ -1,9 +1,9 @@
 ﻿using Microsoft.AspNetCore.Http;
 using System.ComponentModel.DataAnnotations;
 
-namespace MotorcycleMarket.Domain.ViewModels.Motorcycle
+namespace MotorcycleMarket.Domain.ViewModels
 {
-    public class MotorcycleViewModel 
+    public class MotorcycleViewModel
     {
         //TODO: Дисплей + аватар
         public int ID { get; set; }

@@ -26,7 +26,7 @@ namespace MotorcycleMarket.Service.Implementation
         {
             try
             {
-                var user = _userRepository.GetAll().FirstOrDefault(x => x.Username == loginmodel.UserName);
+                var user = await _userRepository.GetAll().FirstOrDefaultAsync(x => x.Username == loginmodel.UserName);
                 if (user == null && !HashPasswordHelper.VerifyPasswordHash(loginmodel.Password, user.PasswordHash, user.PasswordSalt))
                 {
                     return new BaseResponse<ClaimsIdentity>() { Description = "Incorrect password or username entered incorrectly" };

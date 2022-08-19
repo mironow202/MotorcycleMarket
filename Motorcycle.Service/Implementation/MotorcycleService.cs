@@ -38,7 +38,7 @@ namespace MotorcycleMarket.Service.Implementation
                 return new BaseResponse<Motorcycle>()
                 {
                     Data = motorcycle,
-                    StatusCode = Domain.Enum.StatusCode.OK
+                    StatusCode = StatusCode.OK
                 };
             }
             catch (Exception ex)
@@ -174,7 +174,7 @@ namespace MotorcycleMarket.Service.Implementation
             }
         }
  
-        public IBaseResponse<List<Motorcycle>> GetMotorcycles()
+        public IBaseResponse<List<Motorcycle>> GetAllMotorcycles()
         {
             try
             {

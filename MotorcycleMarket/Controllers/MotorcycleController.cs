@@ -18,7 +18,7 @@ namespace MotorcycleMarket.Controllers
         [HttpGet]
         public async Task<IActionResult> GetAllMotorcycles()
         {
-            var response = _motorcycleService.GetMotorcycles();
+            var response = _motorcycleService.GetAllMotorcycles();
             if (response.StatusCode == Domain.Enum.StatusCode.OK)
                 return View(response.Data);
 

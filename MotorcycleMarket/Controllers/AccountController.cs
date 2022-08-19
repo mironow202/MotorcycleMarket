@@ -55,7 +55,6 @@ namespace MotorcycleMarket.Controllers
                     await HttpContext.SignInAsync(CookieAuthenticationDefaults.AuthenticationScheme,
                         new ClaimsPrincipal(response.Data));
 
-                    //await HttpContext.SignInAsync(new ClaimsPrincipal(response.Data));
 
                     return RedirectToAction("Index", "Home");
                 }
@@ -73,19 +72,6 @@ namespace MotorcycleMarket.Controllers
         }
 
 
-        #region test
-        //[Authorize]
-        //public IQueryable<User> GetAll()
-        //{
-        //    return _accountService.GetAll();
-        //}
-
-        //[Authorize]
-        //[HttpGet]
-        //public User GetById(int id)
-        //{
-        //    return _accountService.GetAll().FirstOrDefault(x => x.Id == id);
-        //}
-        #endregion
+   
     }
 }

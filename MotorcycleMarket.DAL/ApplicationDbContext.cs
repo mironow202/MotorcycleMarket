@@ -9,7 +9,7 @@ namespace MotorcycleMarket.DAL
     {
         public DbSet<Motorcycle> Motorcycles { get; set; }
         public DbSet<User> Users { get; set; }
-        public DbSet<User> Profiles { get; set; }
+        public DbSet<Profile> Profiles { get; set; }
 
         public ApplicationDbContext(DbContextOptions<ApplicationDbContext> options) : base(options) { Database.EnsureCreated(); }
 

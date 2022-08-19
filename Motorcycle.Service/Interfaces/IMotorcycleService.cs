@@ -9,7 +9,7 @@ namespace MotorcycleMarket.Service.Interfaces
     {
         BaseResponse<Dictionary<int, string>> GetTypes();
 
-        IBaseResponse<List<Motorcycle>> GetMotorcycles();
+        IBaseResponse<List<Motorcycle>> GetAllMotorcycles();
 
         Task<IBaseResponse<MotorcycleViewModel>> GetMotorcycle(int id);
 

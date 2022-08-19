@@ -1,6 +1,6 @@
 ﻿using System.ComponentModel.DataAnnotations;
 
-namespace Automarket.Domain.ViewModels.Profile
+namespace MotorcycleMarket.Domain.ViewModels
 {
     public class ProfileViewModel
     {

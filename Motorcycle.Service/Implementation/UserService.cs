@@ -6,11 +6,6 @@ using MotorcycleMarket.Domain.Extensions;
 using MotorcycleMarket.Domain.Response;
 using MotorcycleMarket.Domain.ViewModels;
 using MotorcycleMarket.Service.Interfaces;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace MotorcycleMarket.Service.Implementation
 {
@@ -34,7 +29,7 @@ namespace MotorcycleMarket.Service.Implementation
                         Id = x.Id,
                         UserName = x.Username,
                         Role = x.Role.GetDisplayName()
-                    }).ToListAsync();
+                    }).ToListAsync(); ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ;
 
                 return new BaseResponse<IEnumerable<UserViewModel>>()
                 {
@@ -48,6 +43,43 @@ namespace MotorcycleMarket.Service.Implementation
                 {
                     StatusCode = StatusCode.ServerError,
                     Description = $"Внутренняя ошибка: {ex.Message}"
+                };
+            }
+
+           
+        }
+
+        public async Task<BaseResponse<bool>> DeleteUser(long id)
+        {
+            try
+            {
+                var user = await _userRepository.GetAll().FirstOrDefaultAsync(x => x.Id == id);
+                if (user == null)
+                {
+                    return new BaseResponse<bool>()
+                    {
+                        Data = false,
+                        StatusCode = StatusCode.UserNotFound,
+                        Description = "Нет такого"
+                    };
+                }
+
+                await _userRepository.Delete(user);
+
+                return new BaseResponse<bool>()
+                {
+                    Data = true,
+                    StatusCode = StatusCode.OK,
+                    Description = "Нет такого"
+                };
+
+            }
+            catch (Exception ex)
+            {
+                return new BaseResponse<bool>()
+                {
+                    Data = false,
+                    StatusCode = StatusCode.ServerError,
                 };
             }
         }

@@ -1,13 +1,7 @@
 using Microsoft.EntityFrameworkCore;
 using MotorcycleMarket.DAL;
-using MotorcycleMarket.DAL.Interfaces;
-using MotorcycleMarket.DAL.Repositories;
-using MotorcycleMarket.Service.Interfaces;
-using MotorcycleMarket.Service.Implementation;
-using MotorcycleMarket.Domain.Entity;
-using MotorcycleMarket;
-using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Authentication.Cookies;
+using MotorcycleMarket;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -21,12 +15,9 @@ builder.Services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationSc
         options.AccessDeniedPath = new PathString("/Account/Login");
     });
 builder.Services.AddDbContext<ApplicationDbContext>(options => options.UseSqlServer(connection));
-builder.Services.AddScoped<IBaseRepository<Motorcycle>, MotorcycleRepository>();
-builder.Services.AddScoped<IMotorcycleService, MotorcycleService>();
-builder.Services.AddScoped<IBaseRepository<User>, UserRepository>();
-builder.Services.AddScoped<IAccountService, AccountService>();
- 
 
+builder.Services.InitializeRepositories();
+builder.Services.InitializeServices();
 
 var app = builder.Build();
 
